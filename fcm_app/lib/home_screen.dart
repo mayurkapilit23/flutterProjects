@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? token;
+
   @override
   void initState() {
     super.initState();
@@ -18,28 +19,26 @@ class _HomeScreenState extends State<HomeScreen> {
   void initFCM() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     token = await messaging.getToken();
-     print("🟢 FCM Token: $token");
+    print("🟢 FCM Token: $token");
 
-
-
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("📨 Foreground: ${message.notification?.title}");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message.notification?.body ?? '')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message.notification?.body ?? '')));
     });
 
-     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print("📲 App opened via notification");
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Center(child: SelectableText('Your FCM Token:\n\n$token'))),
+      body: SafeArea(
+        child: Center(child: SelectableText('Your FCM Token:\n\n$token')),
+      ),
     );
   }
 }
